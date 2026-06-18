@@ -1,48 +1,12 @@
 pipeline {
     agent {
         kubernetes {
-            yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    jenkins/agent-type: kaniko
-spec:
-  containers:
-    - name: jnlp
-      image: jenkins/inbound-agent:latest
-      resources:
-        requests:
-          memory: "512Mi"
-          cpu: "500m"
-        limits:
-          memory: "1024Mi"
-          cpu: "1000m"
-    - name: kaniko
-      image: gcr.io/kaniko-project/executor:debug
-      command:
-        - /busybox/cat
-      tty: true
-      resources:
-        requests:
-          memory: "2048Mi"
-          cpu: "2000m"
-        limits:
-          memory: "4096Mi"
-          cpu: "4000m"
-      volumeMounts:
-        - name: kaniko-secret
-          mountPath: /kaniko/.docker/
-  volumes:
-    - name: kaniko-secret
-      secret:
-        secretName: kaniko-secret
-            """
+            label 'kaniko'
         }
     }
 
     environment {
-        DOCKERHUB_USERNAME = "owen"
+        DOCKERHUB_USERNAME = "owenshin"
         IMAGE_NAME = "test"
     }
 
